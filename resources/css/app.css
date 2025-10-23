@@ -1,0 +1,659 @@
+/* Custom SweetAlert2 Styles */
+.swal2-popup-custom {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.swal2-popup-custom .swal2-title {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.swal2-popup-custom .swal2-html-container {
+  font-size: 1rem !important;
+  color: #5a6c7d !important;
+  line-height: 1.5 !important;
+}
+
+.swal2-popup-custom .swal2-success {
+  border-color: #28a745 !important;
+}
+
+.swal2-popup-custom .swal2-success-ring {
+  border-color: rgba(40, 167, 69, 0.3) !important;
+}
+
+.swal2-popup-custom .swal2-success-line {
+  background-color: #28a745 !important;
+}
+
+.swal2-popup-custom .swal2-timer-progress-bar {
+  background: linear-gradient(90deg, #28a745, #20c997) !important;
+  height: 4px !important;
+  border-radius: 2px !important;
+}
+
+/* Loading screen improvements */
+.swal2-popup .swal2-loader {
+  border-color: #007bff transparent #007bff transparent !important;
+  border-width: 3px !important;
+}
+
+/* Animation improvements */
+.animate__faster {
+  animation-duration: 0.3s !important;
+}
+
+/* Custom button styles */
+.swal2-popup-custom .swal2-actions {
+  margin-top: 1.5rem !important;
+}
+
+.swal2-popup-custom .swal2-confirm {
+  border-radius: 8px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal2-popup-custom .swal2-confirm:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Success icon animation */
+.swal2-popup-custom .swal2-success-circular-line-left,
+.swal2-popup-custom .swal2-success-circular-line-right {
+  animation: swal2-success-circular-line 0.75s ease-in-out !important;
+}
+
+.swal2-popup-custom .swal2-success-fix {
+  animation: swal2-success-fix 0.75s ease-in-out !important;
+}
+
+@keyframes swal2-success-circular-line {
+  0% {
+    transform: rotate(-45deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-45deg);
+    opacity: 1;
+  }
+}
+
+@keyframes swal2-success-fix {
+  0% {
+    transform: rotate(-45deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-45deg);
+    opacity: 1;
+  }
+}
+
+/* Loading screen improvements */
+.swal2-popup .swal2-loader {
+  border-color: #007bff transparent #007bff transparent !important;
+  border-width: 3px !important;
+  animation: swal2-loading 1s linear infinite !important;
+}
+
+@keyframes swal2-loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading screen text styling */
+.swal2-popup .swal2-title {
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+  color: #495057 !important;
+}
+
+.swal2-popup .swal2-html-container {
+  color: #6c757d !important;
+  font-size: 0.95rem !important;
+}
+
+/* Smooth transitions for all alerts */
+.swal2-popup {
+  transition: all 0.3s ease !important;
+}
+
+/* Custom loading spinner */
+.swal2-loader {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  border: 3px solid #f3f3f3 !important;
+  border-top: 3px solid #007bff !important;
+  animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure smooth transitions between loading and success */
+.swal2-popup.swal2-loading {
+  transition: all 0.3s ease !important;
+}
+
+.swal2-popup.swal2-success {
+  transition: all 0.3s ease !important;
+}
+
+/* Prevent flash between loading and success */
+.swal2-backdrop {
+  transition: opacity 0.3s ease !important;
+}
+
+/* Custom success icon animation */
+.swal2-popup-custom .swal2-success-circular-line-left,
+.swal2-popup-custom .swal2-success-circular-line-right {
+  animation: swal2-success-circular-line 0.75s ease-in-out !important;
+}
+
+.swal2-popup-custom .swal2-success-fix {
+  animation: swal2-success-fix 0.75s ease-in-out !important;
+}
+
+/* Ensure SweetAlert is ALWAYS on top - highest z-index */
+.swal2-container {
+  z-index: 99999 !important;
+}
+
+/* Ensure SweetAlert appears above ALL elements including offcanvas */
+.swal2-container-custom {
+  z-index: 99999 !important;
+}
+
+/* Fix backdrop z-index issue */
+.swal2-backdrop {
+  z-index: 99998 !important;
+}
+
+/* Ensure popup is above backdrop */
+.swal2-popup {
+  z-index: 99999 !important;
+  position: relative !important;
+}
+
+/* Additional improvements for better UX */
+.swal2-popup-custom .swal2-icon {
+  margin: 1.5rem auto 1rem !important;
+}
+
+.swal2-popup-custom .swal2-icon.swal2-success {
+  border-color: #28a745 !important;
+  color: #28a745 !important;
+}
+
+/* Loading screen specific improvements */
+.swal2-popup[class*='swal2-loading'] {
+  padding: 2rem !important;
+}
+
+.swal2-popup[class*='swal2-loading'] .swal2-title {
+  margin-bottom: 1rem !important;
+  font-size: 1.25rem !important;
+}
+
+.swal2-popup[class*='swal2-loading'] .swal2-html-container {
+  margin-top: 0.5rem !important;
+  font-size: 0.95rem !important;
+}
+
+/* Success alert specific improvements */
+.swal2-popup-custom .swal2-title {
+  margin-bottom: 0.5rem !important;
+}
+
+.swal2-popup-custom .swal2-html-container {
+  margin: 0.5rem 0 1rem !important;
+}
+
+/* Ensure smooth fade transitions with better animations */
+.swal2-popup {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  will-change: transform, opacity !important;
+}
+
+.swal2-popup.swal2-show {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  animation: swal2-show 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.swal2-popup.swal2-hide {
+  opacity: 0 !important;
+  transform: scale(0.95) !important;
+  animation: swal2-hide 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* Custom show animation - more bouncy and smooth */
+@keyframes swal2-show {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-30px);
+  }
+  40% {
+    transform: scale(1.05) translateY(-8px);
+  }
+  70% {
+    transform: scale(0.98) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Custom hide animation - more smooth and natural */
+@keyframes swal2-hide {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  30% {
+    transform: scale(0.98) translateY(-3px);
+  }
+  70% {
+    transform: scale(0.96) translateY(-8px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+}
+
+/* Backdrop animation improvements */
+.swal2-backdrop {
+  transition:
+    opacity 0.3s ease,
+    backdrop-filter 0.3s ease !important;
+}
+
+.swal2-backdrop.swal2-backdrop-show {
+  animation: swal2-backdrop-show 0.3s ease !important;
+}
+
+.swal2-backdrop.swal2-backdrop-hide {
+  animation: swal2-backdrop-hide 0.3s ease !important;
+}
+
+@keyframes swal2-backdrop-show {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(2px);
+  }
+}
+
+@keyframes swal2-backdrop-hide {
+  0% {
+    opacity: 1;
+    backdrop-filter: blur(2px);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Custom backdrop for better visual separation - only on card area */
+.swal2-backdrop {
+  background-color: rgba(0, 0, 0, 0.15) !important;
+  backdrop-filter: blur(3px) !important;
+  border-radius: 12px !important;
+  margin: 20px !important;
+}
+
+/* Make backdrop more subtle and focused on card area */
+.swal2-container {
+  background-color: transparent !important;
+  padding: 20px !important;
+}
+
+/* Ensure the popup itself has the main visual focus */
+.swal2-popup {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Make the backdrop only affect the card area, not the entire screen */
+.swal2-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  z-index: -1;
+}
+
+/* Ensure the popup is above the backdrop */
+.swal2-popup {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Make the backdrop more subtle and focused */
+.swal2-backdrop {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)) !important;
+  border-radius: 16px !important;
+  margin: 15px !important;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Simple DataTable Loading Indicator - Keep original styling */
+.dataTables_processing {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  padding: 1.5rem !important;
+  margin: 1rem 0 !important;
+  text-align: center !important;
+  font-weight: 500 !important;
+  color: #6c757d !important;
+}
+
+/* Custom DataTable Loading Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.datatable-custom-loading {
+  font-family: inherit !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: #6c757d !important;
+}
+
+.invalid-feedback {
+  display: block !important;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #dc3545;
+  font-weight: 600;
+  position: relative;
+  z-index: 1000;
+  background: #fff5f5;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border-left: 4px solid #dc3545;
+  border: 1px solid #fecaca;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.1);
+}
+
+#formAuthentication .invalid-feedback:empty {
+  display: none !important;
+}
+
+#formAuthentication .mb-5.is-invalid .invalid-feedback:empty {
+  display: block !important;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.form-check-input.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+  background-color: rgba(220, 53, 69, 0.05) !important;
+  animation: errorShake 0.5s ease-in-out;
+}
+
+/* 2. Style untuk field yang VALID dan TERPILIH (checked) */
+.form-check-input.is-valid:checked {
+  background-color: #28a745 !important; /* <-- Ini yang memberi warna hijau solid */
+  border-color: #28a745 !important;
+}
+
+/* 3. Style untuk label-nya */
+.form-check-input.is-valid + .form-check-label {
+  color: #28a745 !important;
+  font-weight: 600 !important;
+}
+
+/* 4. Style dasar radio button (agar bisa diisi titik) */
+.form-check-input[type='radio'] {
+  position: relative;
+}
+
+/* 5. BUAT TITIK PUTIH saat TERPILIH */
+.form-check-input[type='radio']:checked::after {
+  content: '';
+  display: block;
+  width: 0.5em; /* Ukuran titik */
+  height: 0.5em; /* Ukuran titik */
+  border-radius: 50%;
+  background-color: #fff; /* Warna titiknya (putih) */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Ensure error messages are visible */
+.invalid-feedback.d-block {
+  display: block !important;
+  position: relative;
+  z-index: 1000;
+  background: #fff5f5;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border-left: 4px solid #dc3545;
+  border: 1px solid #fecaca;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.1);
+}
+
+/* Make sure error messages are not hidden */
+.form-floating .invalid-feedback,
+.position-relative .invalid-feedback {
+  display: block !important;
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Enhanced error styling for better visibility */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff5f5 !important;
+}
+
+.form-check-input.is-invalid {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff5f5 !important;
+}
+
+/* Radio button error styling */
+.form-check-input.is-invalid + .form-check-label {
+  color: #dc3545 !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure error indicators are always visible */
+.is-invalid {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff5f5 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Force error message visibility */
+.invalid-feedback {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure error messages are not hidden by other elements */
+.invalid-feedback.d-block {
+  position: relative !important;
+  z-index: 1000 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Valid field styling */
+.form-control.is-valid,
+.form-select.is-valid,
+.form-check-input.is-valid {
+  border-color: #28a745 !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.form-control.is-valid:focus,
+.form-select.is-valid:focus {
+  border-color: #28a745 !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Radio button valid styling */
+.form-check-input.is-valid + .form-check-label {
+  color: #28a745 !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure error cleanup works properly */
+.invalid-feedback {
+  transition: all 0.3s ease !important;
+}
+
+/* Force removal of error messages */
+.invalid-feedback.removing {
+  opacity: 0 !important;
+  transform: translateY(-10px) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Add error icon to invalid fields */
+.form-control.is-invalid::after,
+.form-select.is-invalid::after {
+  content: '⚠';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #dc3545;
+  font-size: 1rem;
+}
+
+/* Highlight error fields with animation */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  animation: errorShake 0.5s ease-in-out;
+}
+
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* DataTable Loading Indicator Only - Keep original styling */
+
+/* Ensure offcanvas doesn't interfere with SweetAlert */
+/* .offcanvas {
+  z-index: 1045 !important;
+}
+
+.offcanvas-backdrop {
+  z-index: 1040 !important;
+} */
+
+/* SweetAlert MUST be above everything - highest priority */
+.swal2-container-custom {
+  /* z-index: 99999 !important; */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ensure SweetAlert popup is above everything */
+.swal2-popup-custom {
+  /* z-index: 99999 !important; */
+  position: relative !important;
+}
+
+/* Fix backdrop positioning - must be below popup but above everything else */
+.swal2-backdrop {
+  /* z-index: 99998 !important; */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(2px) !important;
+}
+
+/* Ensure SweetAlert container covers entire viewport */
+.swal2-container {
+  /* z-index: 99999 !important; */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ensure popup is centered and visible */
+.swal2-popup {
+  /* z-index: 99999 !important; */
+  position: relative !important;
+  margin: auto !important;
+  max-width: 90% !important;
+  max-height: 90% !important;
+  overflow-y: auto !important;
+}
