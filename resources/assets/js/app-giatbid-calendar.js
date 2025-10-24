@@ -1,13 +1,8 @@
 /**
- * App Calendar
+ * App Calendar - Kegiatan Bidang (Giatbid)
+ * * Menggabungkan UI dari app-calendar.js dengan logika
+ * CRUD AJAX (FormValidation, SweetAlert, Fetch) dari app-pegawai-list.js
  */
-
-/**
- * ! If both start and end dates are same Full calendar will nullify the end date value.
- * ! Full calendar will end the event on a day before at 12:00:00AM thus, event won't extend to the end date.
- * ! We are getting events from a separate file named app-calendar-events.js. You can add or remove events from there.
- *
- **/
 
 'use strict';
 
@@ -23,14 +18,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const appCalendarSidebar = document.querySelector('.app-calendar-sidebar');
   const addEventSidebar = document.getElementById('addEventSidebar');
   const appOverlay = document.querySelector('.app-overlay');
+
+  // (Anda bisa sesuaikan warna ini di view)
   const calendarsColor = {
-    Business: 'primary',
-    Holiday: 'success',
-    Personal: 'danger',
-    Family: 'warning',
-    ETC: 'info'
+    Sekretariat: 'primary',
+    KIP: 'success',
+    IKP: 'danger',
+    Santik: 'warning',
+    Aptika: 'info'
   };
-  const offcanvasTitle = document.getElementById('addEventSidebarLabel');
+
+  const offcanvasTitle = document.getElementById('addEventSidebarLabel'); // Pastikan ID ini ada di HTML
   const btnToggleSidebar = document.querySelector('.btn-toggle-sidebar');
   const btnDeleteEvent = document.querySelector('.btn-delete-event');
   const btnCancel = document.querySelector('.btn-cancel');
@@ -39,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const inlineCalendarEl = document.querySelector('.inline-calendar');
 
   // Form & Tombol
-  const giatbidForm = document.getElementById('giatbidForm');
-  const submitBtn = document.getElementById('submitBtn');
+  const giatbidForm = document.getElementById('giatbidForm'); // Pastikan ID form ini ada di HTML
+  const submitBtn = document.getElementById('submitBtn'); // Pastikan ID tombol submit ini ada di HTML
 
   // Elemen Form (Flatpickr)
   const tglKegiatan = document.getElementById('tgl_kegiatan');
@@ -83,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Swal.fire({
       title: message,
       text: 'Mohon tunggu sebentar...',
+      // Gunakan ikon loader bawaan SweetAlert
       iconHtml: '<div class="swal2-loader"></div>',
       showConfirmButton: false,
       showCancelButton: false,
@@ -90,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
       showCloseButton: false,
       allowOutsideClick: false,
       allowEscapeKey: false,
-      customClass: { icon: 'swal2-icon-show' }
+      customClass: { icon: 'swal2-icon-show' } // Memaksa ikon untuk tampil
     });
   }
 
@@ -103,9 +102,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!submitBtn) return;
     const btnText = submitBtn.querySelector('.btn-text');
     const btnLoading = submitBtn.querySelector('.btn-loading');
-    submitBtn.disabled = loading;
-    btnText.classList.toggle('d-none', loading);
-    btnLoading.classList.toggle('d-none', !loading);
+
+    if (loading) {
+      submitBtn.disabled = true;
+      btnText.classList.add('d-none');
+      btnLoading.classList.remove('d-none');
+    } else {
+      submitBtn.disabled = false;
+      btnText.classList.remove('d-none');
+      btnLoading.classList.add('d-none');
+    }
   }
 
   // === 3. INISIALISASI PLUGIN (Flatpickr, Select2, FormValidation) ===
@@ -164,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
       trigger: new FormValidation.plugins.Trigger(),
       bootstrap5: new FormValidation.plugins.Bootstrap5({
         eleValidClass: '',
-        rowSelector: '.mb-5'
+        rowSelector: '.mb-5' // Sesuaikan dengan wrapper field Anda
       }),
       autoFocus: new FormValidation.plugins.AutoFocus()
       // JANGAN GUNAKAN SubmitButton, kita handle manual
@@ -187,6 +193,10 @@ document.addEventListener('DOMContentLoaded', function () {
     waktuPicker.clear();
     $('#giatbidForm .select2').val(null).trigger('change');
 
+    // Ganti judul dan tombol kembali ke mode "Add"
+    offcanvasTitle.innerHTML = 'Tambah Kegiatan';
+    submitBtn.innerHTML = '<span class="btn-text">Simpan</span><span class="btn-loading d-none">Menyimpan...</span>'; // Sesuaikan teks
+
     // Sembunyikan tombol delete
     btnDeleteEvent.classList.add('d-none');
   }
@@ -197,27 +207,30 @@ document.addEventListener('DOMContentLoaded', function () {
     filterInput.forEach(item => {
       if (item.checked) selected.push(item.getAttribute('data-value'));
     });
-    if (selectAll.checked) return ['all'];
+    // Jika 'Select All' dicentang, kembalikan 'all' untuk bypass filter
+    if (selectAll.checked || selected.length === filterInput.length) {
+      return ['all'];
+    }
     return selected;
   }
 
   // Init FullCalendar
   calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
+
+    // ** PENGGANTIAN KUNCI 1: Mengambil event via AJAX dari Controller **
     events: function (fetchInfo, successCallback, failureCallback) {
-      // Panggil rute /giatbid/events yang kita buat
       $.ajax({
-        url: '/giatbid/events',
+        url: '/giatbid/events', // Rute yang kita buat di GiatbidList.php
         type: 'GET',
         success: function (data) {
           // Filter data di sisi klien berdasarkan checkbox
           const selectedBidang = getSelectedBidang();
+
           if (selectedBidang.includes('all')) {
-            successCallback(data); // Tampilkan semua
+            successCallback(data); // Tampilkan semua jika 'all'
           } else {
-            const filteredEvents = data.filter(event =>
-              selectedBidang.includes(event.extendedProps.calendar)
-            );
+            const filteredEvents = data.filter(event => selectedBidang.includes(event.extendedProps.calendar));
             successCallback(filteredEvents);
           }
         },
@@ -232,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
     },
+
     plugins: [
       FullCalendar.dayGridPlugin,
       FullCalendar.interactionPlugin,
@@ -251,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- EVENT HANDLER KALENDER ---
 
-    // Klik pada tanggal kosong (CREATE)
+    // ** PENGGANTIAN KUNCI 2: Klik pada tanggal kosong (CREATE) **
     dateClick: function (info) {
       resetForm();
       offcanvasTitle.innerHTML = 'Tambah Kegiatan';
@@ -263,20 +277,23 @@ document.addEventListener('DOMContentLoaded', function () {
       bsAddEventSidebar.show();
     },
 
-    // Klik pada event yang ada (EDIT)
+    // ** PENGGANTIAN KUNCI 3: Klik pada event yang ada (EDIT) **
     eventClick: function (info) {
       resetForm();
       offcanvasTitle.innerHTML = 'Edit Kegiatan';
       currentEventId = info.event.id; // Simpan ID event
 
+      // Ganti teks tombol submit
+      submitBtn.innerHTML = '<span class="btn-text">Update</span><span class="btn-loading d-none">Mengupdate...</span>';
+
       // Tampilkan tombol delete
       btnDeleteEvent.classList.remove('d-none');
 
-      // Ambil data lengkap dari server
+      // Ambil data lengkap dari server menggunakan pola dari app-pegawai-list.js
       showLoadingScreen('Memuat data kegiatan...');
       $.get(`/giatbid/${currentEventId}/edit`, function (data) {
         // Isi form dengan data
-        $('#id_kegiatan').val(data.id_kegiatan);
+        $('#id_kegiatan').val(data.id_kegiatan); // Simpan ID di hidden input
         $('#nama_kegiatan').val(data.nama_kegiatan);
         tglPicker.setDate(data.tgl_kegiatan, true);
         waktuPicker.setDate(data.waktu_kegiatan, true);
@@ -310,6 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
   calendar.render();
 
   // === 5. EVENT HANDLER FORM (CRUD AJAX) ===
+  // (Logika dari app-pegawai-list.js)
 
   // Tombol Submit (Create / Update)
   giatbidForm.addEventListener('submit', function (e) {
@@ -332,7 +350,8 @@ document.addEventListener('DOMContentLoaded', function () {
     isSubmitting = true;
     setButtonLoading(true);
 
-    const id = $('#id_kegiatan').val();
+    // Cek apakah ini CREATE atau UPDATE
+    const id = $('#id_kegiatan').val(); // Asumsikan ada hidden input <input type="hidden" id="id_kegiatan">
     const loadingMessage = id ? 'Memperbarui data...' : 'Menyimpan data...';
     showLoadingScreen(loadingMessage);
 
@@ -374,11 +393,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (xhr.status === 422 && xhr.responseJSON.errors) {
           // Tampilkan error validasi
           const errors = xhr.responseJSON.errors;
-          let errorHtml = '<ul class="text-start">';
+          let errorHtml = '<ul class="text-start" style="padding-left: 20px;">';
           $.each(errors, function (key, value) {
             errorHtml += `<li>${value[0]}</li>`;
             // Tandai field yang error
-            $('#' + key).addClass('is-invalid');
+            $(`[name="${key}"]`).addClass('is-invalid');
           });
           errorHtml += '</ul>';
 
@@ -403,13 +422,14 @@ document.addEventListener('DOMContentLoaded', function () {
   btnDeleteEvent.addEventListener('click', function () {
     if (!currentEventId) return;
 
+    // Gunakan konfirmasi SweetAlert dari app-pegawai-list.js
     showAlertOnce({
       title: 'Apakah Anda Yakin?',
       text: 'Data yang dihapus tidak dapat dikembalikan!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Ya, hapus!',
-      cancelButtonText: 'Batal',
+      cancelButtonText: 'Batal'
     }).then(function (result) {
       if (result.isConfirmed) {
         showLoadingScreen('Menghapus data...');
@@ -452,7 +472,14 @@ document.addEventListener('DOMContentLoaded', function () {
     resetForm();
   });
 
+  if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', function () {
+      resetForm(); // Panggil fungsi reset
+    });
+  }
+
   // === 6. EVENT HANDLER SIDEBAR KALENDER ===
+  // (Diambil dari app-calendar.js)
 
   // Filter Checkbox
   if (selectAll) {
@@ -483,6 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     inlineCalInstance.config.onChange.push(function (date) {
       calendar.gotoDate(date[0]);
+      // Sembunyikan sidebar saat tanggal dipilih (opsional)
       appCalendarSidebar.classList.remove('show');
       appOverlay.classList.remove('show');
     });

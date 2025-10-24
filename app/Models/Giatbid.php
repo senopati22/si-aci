@@ -1,4 +1,5 @@
 <?php
+// app/Models/Giatbid.php
 
 namespace App\Models;
 
@@ -36,7 +37,7 @@ class Giatbid extends Model
     }
 
     // --- RELASI PENANGGUNG JAWAB ---
-    // Ganti relasi pegawai() yang lama dengan 5 relasi ini
+    // (Relasi ini menghubungkan ID PJ ke tabel Pegawai)
 
     public function pjAcara()
     {

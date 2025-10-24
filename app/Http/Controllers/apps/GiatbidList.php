@@ -1,4 +1,5 @@
 <?php
+// app/Http/Controllers/apps/GiatbidList.php
 
 namespace App\Http\Controllers\apps;
 
@@ -22,11 +23,13 @@ class GiatbidList extends Controller
                            ->orderBy('nama_pegawai')
                            ->get(['id_pegawai', 'nama_pegawai']);
 
+        // Arahkan ke view kalender, bukan list pegawai
         return view('content.apps.app-giatbid-list', compact('pegawais'));
     }
 
     /**
      * Menyediakan data untuk FullCalendar
+     * (Pengganti fungsi 'data()' di PegawaiList.php)
      */
     public function events(Request $request)
     {
@@ -47,7 +50,8 @@ class GiatbidList extends Controller
                 // 'end' => $startDateTime, // Anda bisa tambahkan 'tgl_selesai' jika ada
                 'allDay' => false, // Asumsikan tidak ada yang all-day
                 'extendedProps' => [
-                    'calendar' => $giat->bidang_kegiatan ?? 'Lainnya' // Untuk filter
+                    // Ini digunakan untuk filter checkbox di sidebar
+                    'calendar' => $giat->bidang_kegiatan ?? 'Lainnya'
                 ]
             ];
         }
@@ -58,6 +62,7 @@ class GiatbidList extends Controller
 
     /**
      * Menyimpan data baru ke database.
+     * (Logika dari PegawaiList.php)
      */
     public function store(Request $request)
     {
@@ -77,12 +82,11 @@ class GiatbidList extends Controller
             'anggaran_kegiatan' => 'required|numeric|min:0',
             'status_apbd_kegiatan' => 'required|string|max:50',
         ], [
-            // (Tambahkan pesan error kustom Anda di sini jika perlu)
             'nama_kegiatan.unique' => 'Nama Kegiatan ini sudah terdaftar.',
             'tgl_kegiatan.required' => 'Tanggal Kegiatan wajib diisi.',
             'waktu_kegiatan.date_format' => 'Format Waktu harus HH:MM (contoh: 09:00).',
             'pj_acara_kegiatan.required' => 'PJ Acara wajib dipilih.',
-            // ... pesan lainnya
+            // ... (tambahkan pesan error kustom lainnya)
         ]);
 
         if ($validator->fails()) {
@@ -102,6 +106,7 @@ class GiatbidList extends Controller
 
     /**
      * Mengambil data untuk form edit.
+     * (Logika dari PegawaiList.php)
      */
     public function edit(Giatbid $giatbid)
     {
@@ -111,6 +116,7 @@ class GiatbidList extends Controller
 
     /**
      * Memperbarui data di database.
+     * (Logika dari PegawaiList.php)
      */
     public function update(Request $request, Giatbid $giatbid)
     {
@@ -158,6 +164,7 @@ class GiatbidList extends Controller
 
     /**
      * Menghapus data dari database.
+     * (Logika dari PegawaiList.php)
      */
     public function destroy(Giatbid $giatbid)
     {

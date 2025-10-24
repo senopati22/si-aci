@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', 'Fullcalendar - Apps')
+@section('title', 'Kegiatan Bidang')
 
 @section('vendor-style')
   @vite([
@@ -15,7 +15,10 @@
 @endsection
 
 @section('page-style')
-  @vite(['resources/assets/vendor/scss/pages/app-calendar.scss'])
+  @vite([
+    'resources/assets/vendor/scss/pages/app-calendar.scss',
+    'resources/css/app.css'
+  ])
 @endsection
 
 @section('vendor-script')
@@ -34,8 +37,7 @@
 
 @section('page-script')
   @vite([
-    'resources/assets/js/app-calendar-events.js',
-    'resources/assets/js/app-calendar.js',
+    'resources/assets/js/app-giatbid-calendar.js'
   ])
 @endsection
 
@@ -47,7 +49,7 @@
       <div class="p-5 my-sm-0 mb-4 border-bottom">
         <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="offcanvas" data-bs-target="#addEventSidebar" aria-controls="addEventSidebar">
           <i class="ri-add-line ri-16px me-1_5"></i>
-          <span class="align-middle">Add Event</span>
+          <span class="align-middle">Tambah Kegiatan</span>
         </button>
       </div>
       <div class="px-4">
@@ -66,26 +68,19 @@
         </div>
 
         <div class="app-calendar-events-filter text-heading">
-          <div class="form-check form-check-danger mb-5 ms-3">
-            <input class="form-check-input input-filter" type="checkbox" id="select-personal" data-value="personal" checked>
-            <label class="form-check-label" for="select-personal">Personal</label>
-          </div>
-          <div class="form-check mb-5 ms-3">
-            <input class="form-check-input input-filter" type="checkbox" id="select-business" data-value="business" checked>
-            <label class="form-check-label" for="select-business">Business</label>
-          </div>
-          <div class="form-check form-check-warning mb-5 ms-3">
-            <input class="form-check-input input-filter" type="checkbox" id="select-family" data-value="family" checked>
-            <label class="form-check-label" for="select-family">Family</label>
+          <div class="form-check form-check-primary mb-5 ms-3">
+            <input class="form-check-input input-filter" type="checkbox" id="select-sekretariat" data-value="Sekretariat" checked>
+            <label class="form-check-label" for="select-sekretariat">Sekretariat</label>
           </div>
           <div class="form-check form-check-success mb-5 ms-3">
-            <input class="form-check-input input-filter" type="checkbox" id="select-holiday" data-value="holiday" checked>
-            <label class="form-check-label" for="select-holiday">Holiday</label>
+            <input class="form-check-input input-filter" type="checkbox" id="select-bidang1" data-value="Bidang I" checked>
+            <label class="form-check-label" for="select-bidang1">Bidang I</label>
           </div>
-          <div class="form-check form-check-info ms-3">
-            <input class="form-check-input input-filter" type="checkbox" id="select-etc" data-value="etc" checked>
-            <label class="form-check-label" for="select-etc">ETC</label>
+          <div class="form-check form-check-danger mb-5 ms-3">
+            <input class="form-check-input input-filter" type="checkbox" id="select-bidang2" data-value="Bidang II" checked>
+            <label class="form-check-label" for="select-bidang2">Bidang II</label>
           </div>
+          {{-- Tambahkan bidang lain jika perlu --}}
         </div>
       </div>
     </div>
