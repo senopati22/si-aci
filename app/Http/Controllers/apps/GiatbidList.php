@@ -35,6 +35,21 @@ class GiatbidList extends Controller
     {
         // Ambil data kegiatan dari database
         $giatbids = Giatbid::all();
+        
+        // Debug: Log data yang diambil
+        Log::info('Giatbids data from database', [
+            'count' => $giatbids->count(),
+            'data' => $giatbids->toArray()
+        ]);
+
+        // Konfigurasi warna untuk setiap bidang
+        $calendarsColor = [
+            'Sekretariat' => '#696cff',
+            'Bidang I' => '#71dd37',
+            'Bidang II' => '#ff3e1d',
+            'Bidang III' => '#ffab00',
+            'Bidang IV' => '#03c3ec'
+        ];
 
         $events = [];
         foreach ($giatbids as $giat) {
@@ -43,19 +58,30 @@ class GiatbidList extends Controller
             $startDateTime = Carbon::parse($giat->tgl_kegiatan . ' ' . $giat->waktu_kegiatan)
                                 ->toIso8601String();
 
-            $events[] = [
+            $eventData = [
                 'id' => $giat->id_kegiatan,
                 'title' => $giat->nama_kegiatan,
                 'start' => $startDateTime,
                 // 'end' => $startDateTime, // Anda bisa tambahkan 'tgl_selesai' jika ada
                 'allDay' => false, // Asumsikan tidak ada yang all-day
+                'color' => $calendarsColor[$giat->bidang_kegiatan] ?? '#6c757d',
                 'extendedProps' => [
                     // Ini digunakan untuk filter checkbox di sidebar
                     'calendar' => $giat->bidang_kegiatan ?? 'Lainnya'
                 ]
             ];
+            
+            // Debug: Log setiap event yang dibuat
+            Log::info('Creating event for giatbid', [
+                'id_kegiatan' => $giat->id_kegiatan,
+                'nama_kegiatan' => $giat->nama_kegiatan,
+                'event_id' => $eventData['id']
+            ]);
+            
+            $events[] = $eventData;
         }
 
+        Log::info('Events data being sent to frontend', ['events_count' => count($events)]);
         return response()->json($events);
     }
 
@@ -110,8 +136,34 @@ class GiatbidList extends Controller
      */
     public function edit(Giatbid $giatbid)
     {
-        // Kembalikan data giatbid sebagai JSON
-        return response()->json($giatbid);
+        try {
+            // Debug: Log ID yang diterima
+            Log::info('Edit giatbid request', ['id' => $giatbid->id_kegiatan]);
+            
+            // Ambil data dengan relasi penanggung jawab
+            $giatbid->load([
+                'pjAcara:id_pegawai,nama_pegawai',
+                'pjSarpras:id_pegawai,nama_pegawai', 
+                'pjMc:id_pegawai,nama_pegawai',
+                'pjKonsumsi:id_pegawai,nama_pegawai',
+                'pjDokumentasi:id_pegawai,nama_pegawai'
+            ]);
+            
+            // Tambahkan nama penanggung jawab ke response
+            $data = $giatbid->toArray();
+            $data['pj_acara_nama'] = $giatbid->pjAcara->nama_pegawai ?? null;
+            $data['pj_sarpras_nama'] = $giatbid->pjSarpras->nama_pegawai ?? null;
+            $data['pj_mc_nama'] = $giatbid->pjMc->nama_pegawai ?? null;
+            $data['pj_konsumsi_nama'] = $giatbid->pjKonsumsi->nama_pegawai ?? null;
+            $data['pj_dokumentasi_nama'] = $giatbid->pjDokumentasi->nama_pegawai ?? null;
+            
+            Log::info('Edit giatbid response', ['data' => $data]);
+            
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error in edit giatbid', ['error' => $e->getMessage(), 'id' => $giatbid->id_kegiatan ?? 'unknown']);
+            return response()->json(['error' => 'Data tidak ditemukan'], 404);
+        }
     }
 
     /**

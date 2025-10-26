@@ -314,9 +314,8 @@ Route::middleware('auth')->group(function () {
   Route::delete('/pangkat/{pangkat}', [PangkatList::class, 'destroy'])->name('pangkat.destroy');
 
   // =========== ROUTE KEGIATAN BIDANG ============== //
-  Route::get('/giatbid', [GiatbidList::class, 'index'])->name('pegawai.master.giatbid.index');
-  Route::get('/giatbid/data', [GiatbidList::class, 'data'])->name('giatbid.data');
-  Route::get('/giatbid/events', [GiatbidList::class, 'events'])->name('events');
+  Route::get('/giatbid', [GiatbidList::class, 'index'])->name('giatbid.index');
+  Route::get('/giatbid/events', [GiatbidList::class, 'events'])->name('giatbid.events');
 
   Route::post('/giatbid', [GiatbidList::class, 'store'])->name('giatbid.store');
   Route::get('/giatbid/{giatbid}/edit', [GiatbidList::class, 'edit'])->name('giatbid.edit');

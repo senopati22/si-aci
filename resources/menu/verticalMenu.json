@@ -48,6 +48,12 @@
       ]
     },
     {
+      "url": "giatbid",
+      "name": "Kegiatan Bidang",
+      "icon": "menu-icon tf-icons ri-calendar-line",
+      "slug": "giatbid.index"
+    },
+    {
       "url": "app/email",
       "name": "Email",
       "icon": "menu-icon tf-icons ri-mail-open-line",
@@ -58,12 +64,6 @@
       "name": "Chat",
       "icon": "menu-icon tf-icons ri-wechat-line",
       "slug": "app-chat"
-    },
-    {
-      "url": "giatbid",
-      "name": "Kegiatan Bidang",
-      "icon": "menu-icon tf-icons ri-calendar-line",
-      "slug": "giatbid"
     },
     {
       "url": "app/calendar",
