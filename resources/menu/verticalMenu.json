@@ -54,6 +54,15 @@
       "slug": "giatbid.index"
     },
     {
+      "menuHeader": "Privacy & Security"
+    },
+    {
+      "url": "user",
+      "name": "Management User",
+      "icon": "menu-icon tf-icons ri-user-settings-line",
+      "slug": "user.index"
+    },
+    {
       "url": "app/email",
       "name": "Email",
       "icon": "menu-icon tf-icons ri-mail-open-line",

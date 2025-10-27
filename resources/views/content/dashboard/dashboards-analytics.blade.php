@@ -30,7 +30,10 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('page-script')
-@vite(['resources/assets/js/dashboards-analytics.js'])
+  @vite([
+    'resources/assets/js/dashboards-analytics.js',
+    'resources/assets/js/app-giatbid-calendar.js'
+  ])
 @endsection
 
 @section('content')
@@ -66,47 +69,43 @@ $configData = Helper::appClasses();
   </div>
   <!--/ Gamification Card -->
 
-  <!-- Statistics Total Order -->
   <div class="col-xxl-2 col-sm-6">
     <div class="card h-100">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
           <div class="avatar">
             <div class="avatar-initial bg-label-primary rounded-3">
-              <i class="ri-shopping-cart-2-line ri-24px"></i>
+              <i class="ri-group-line ri-24px"></i>
             </div>
-          </div>
-          <div class="d-flex align-items-center">
-            <p class="mb-0 text-success me-1">+22%</p>
-            <i class="ri-arrow-up-s-line text-success"></i>
           </div>
         </div>
         <div class="card-info mt-5">
-          <h5 class="mb-1">155k</h5>
-          <p>Total Orders</p>
-          <div class="badge bg-label-secondary rounded-pill">Last 4 Month</div>
+          <h5 class="mb-1">{{ $totalPegawai }}</h5>
+          <p>Total Pegawai</p>
+          <div class="badge bg-label-secondary rounded-pill">BAKESBANGPOL</div>
         </div>
       </div>
     </div>
   </div>
-  <!--/ Statistics Total Order -->
 
-  <!-- Sessions line chart -->
   <div class="col-xxl-2 col-sm-6">
     <div class="card h-100">
-      <div class="card-header pb-0">
-        <div class="d-flex align-items-center mb-1 flex-wrap">
-          <h5 class="mb-0 me-1">$38.5k</h5>
-          <p class="mb-0 text-success">+62%</p>
-        </div>
-        <span class="d-block card-subtitle">Sessions</span>
-      </div>
       <div class="card-body">
-        <div id="sessions"></div>
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+          <div class="avatar">
+            <div class="avatar-initial bg-label-info rounded-3">
+              <i class="ri-calendar-line ri-24px"></i>
+            </div>
+          </div>
+        </div>
+        <div class="card-info mt-5">
+          <h5 class="mb-1">{{ $totalGiatbid }}</h5>
+          <p>Total Kegiatan Bidang</p>
+          <div class="badge bg-label-secondary rounded-pill">BAKESBANGPOL</div>
+        </div>
       </div>
     </div>
   </div>
-  <!--/ Sessions line chart -->
 
   <!-- Total Transactions & Report Chart -->
   <div class="col-12 col-xxl-8">

@@ -6,6 +6,7 @@ use App\Http\Controllers\apps\GolonganList;
 use App\Http\Controllers\apps\JabatanList;
 use App\Http\Controllers\apps\PangkatList;
 use App\Http\Controllers\apps\GiatbidList;
+use App\Http\Controllers\apps\Userlist;
 
 
 use App\Http\Controllers\laravel_example\UserManagement;
@@ -321,6 +322,18 @@ Route::middleware('auth')->group(function () {
   Route::get('/giatbid/{giatbid}/edit', [GiatbidList::class, 'edit'])->name('giatbid.edit');
   Route::put('/giatbid/{giatbid}', [GiatbidList::class, 'update'])->name('giatbid.update');
   Route::delete('/giatbid/{giatbid}', [GiatbidList::class, 'destroy'])->name('giatbid.destroy');
+
+  // =========== ROUTE USER ================ //
+  Route::get('/user', [UserList::class, 'index'])->name('user.index');
+
+  // Rute khusus untuk mengambil data via AJAX untuk DataTables
+  Route::get('/user/data', [UserList::class, 'data'])->name('user.data');
+
+  // Rute untuk proses CRUD via AJAX
+  Route::post('/user', [UserList::class, 'store'])->name('user.store');
+  Route::get('/user/{user}/edit', [UserList::class, 'edit'])->name('user.edit');
+  Route::put('/user/{user}', [UserList::class, 'update'])->name('user.update');
+  Route::delete('/user/{user}', [UserList::class, 'destroy'])->name('user.destroy');
 
 
 

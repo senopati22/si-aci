@@ -60,25 +60,25 @@ class PegawaiList extends Controller
     ->leftJoin('golongan', 'pegawai.id_golongan', '=', 'golongan.id_golongan')
     ->leftJoin('eselon', 'pegawai.id_eselon', '=', 'eselon.id_eselon');
 
-return DataTables::of($pegawai)
-    ->addIndexColumn()
-    ->addColumn('action', function ($row) {
-        $editBtn = '<a href="javascript:void(0)" data-id="' . $row->id_pegawai . '" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect edit-btn" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line ri-20px"></i></a>';
-        $deleteBtn = '<a href="javascript:void(0)" data-id="' . $row->id_pegawai . '" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect delete-btn" data-bs-toggle="tooltip" title="Hapus"><i class="ri-delete-bin-7-line ri-20px"></i></a>';
-        return '<div class="d-flex align-items-center">' . $editBtn . $deleteBtn . '</div>';
-    })
-    ->filterColumn('nama_pangkat', function($query, $keyword) {
-        $query->where('pangkat.nama_pangkat', 'like', "%{$keyword}%");
-    })
-    ->filterColumn('nama_golongan', function($query, $keyword) {
-        $query->where('golongan.nama_golongan', 'like', "%{$keyword}%");
-    })
-    ->filterColumn('nama_jabatan_pegawai', function($query, $keyword) {
-        $query->where('jabatan.nama_jabatan', 'like', "%{$keyword}%");
-    })
-    ->rawColumns(['action'])
-    ->make(true);
-}
+    return DataTables::of($pegawai)
+        ->addIndexColumn()
+        ->addColumn('action', function ($row) {
+            $editBtn = '<a href="javascript:void(0)" data-id="' . $row->id_pegawai . '" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect edit-btn" data-bs-toggle="tooltip" title="Edit"><i class="ri-edit-box-line ri-20px"></i></a>';
+            $deleteBtn = '<a href="javascript:void(0)" data-id="' . $row->id_pegawai . '" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect delete-btn" data-bs-toggle="tooltip" title="Hapus"><i class="ri-delete-bin-7-line ri-20px"></i></a>';
+            return '<div class="d-flex align-items-center">' . $editBtn . $deleteBtn . '</div>';
+        })
+        ->filterColumn('nama_pangkat', function($query, $keyword) {
+            $query->where('pangkat.nama_pangkat', 'like', "%{$keyword}%");
+        })
+        ->filterColumn('nama_golongan', function($query, $keyword) {
+            $query->where('golongan.nama_golongan', 'like', "%{$keyword}%");
+        })
+        ->filterColumn('nama_jabatan_pegawai', function($query, $keyword) {
+            $query->where('jabatan.nama_jabatan', 'like', "%{$keyword}%");
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+  }
 
   /**
    * Menyimpan data baru ke database.

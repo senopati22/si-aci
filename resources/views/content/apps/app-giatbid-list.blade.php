@@ -49,7 +49,7 @@
       <div class="p-5 my-sm-0 mb-4 border-bottom">
         <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="offcanvas" data-bs-target="#addEventSidebar" aria-controls="addEventSidebar">
           <i class="ri-add-line ri-16px me-1_5"></i>
-          <span class="align-middle">Tambah Kegiatan</span>
+          <span class="align-middle">Tambah Kegiatan Bidang</span>
         </button>
       </div>
       <div class="px-4">
@@ -233,15 +233,16 @@
       </div>
     </div>
     <!-- /Calendar & Modal -->
-    
+
     <!-- Modal Detail Kegiatan -->
     <div class="modal fade" id="detailKegiatanModal" tabindex="-1" aria-labelledby="detailKegiatanModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="detailKegiatanModalLabel">Detail Kegiatan</h5>
+            <h5 class="modal-title" id="detailKegiatanModalLabel">-</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <hr>
           <div class="modal-body">
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -277,7 +278,7 @@
                 <p class="form-control-plaintext" id="detailAnggaran">-</p>
               </div>
             </div>
-            
+
             <hr>
             <h6 class="mb-3">Penanggung Jawab</h6>
             <div class="row">
@@ -304,13 +305,13 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-            <button type="button" class="btn btn-primary" id="editKegiatanBtn">
+            <button type="button" class="btn btn-outline-primary" id="editKegiatanBtn">
               <i class="ri-edit-line me-1"></i>Edit
             </button>
             <button type="button" class="btn btn-outline-danger" id="hapusKegiatanBtn">
               <i class="ri-delete-bin-line me-1"></i>Hapus
             </button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
           </div>
         </div>
       </div>

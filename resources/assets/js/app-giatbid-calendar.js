@@ -6,6 +6,8 @@
 
 'use strict';
 
+import { Indonesian } from "flatpickr/dist/l10n/id.js";
+
 let direction = 'ltr';
 
 if (isRtl) {
@@ -13,14 +15,13 @@ if (isRtl) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  console.log('🚀 Giatbid Calendar Script Loading...');
-  
+
   // === 1. DEKLARASI ELEMEN ===
   const calendarEl = document.getElementById('calendar');
   const appCalendarSidebar = document.querySelector('.app-calendar-sidebar');
   const addEventSidebar = document.getElementById('addEventSidebar');
   const appOverlay = document.querySelector('.app-overlay');
-  
+
   // Pastikan form siap untuk validasi - JANGAN trigger validasi di awal
   setTimeout(() => {
     const form = document.getElementById('giatbidForm');
@@ -68,12 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
   let isAlertVisible = false;
   let currentEventId = null; // Untuk menyimpan ID saat edit
   const bsAddEventSidebar = new bootstrap.Offcanvas(addEventSidebar);
-  
+
   // Modal Detail Kegiatan
   const detailKegiatanModal = new bootstrap.Modal(document.getElementById('detailKegiatanModal'));
   const editKegiatanBtn = document.getElementById('editKegiatanBtn');
   const hapusKegiatanBtn = document.getElementById('hapusKegiatanBtn');
-  
+
   // Mobile Sidebar Toggle
   const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
 
@@ -88,11 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function showAlertOnce(options) {
     if (isAlertVisible) return Promise.resolve();
     isAlertVisible = true;
-    
+
     // Konfigurasi default untuk SweetAlert - HANYA tombol OK
     const defaultOptions = {
-      showClass: { popup: 'swal2-show' },
-      hideClass: { popup: 'swal2-hide' },
       showConfirmButton: true,
       showCancelButton: false,
       showDenyButton: false,
@@ -107,10 +106,10 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmButton: 'btn btn-primary'
       }
     };
-    
+
     // Merge dengan options yang dikirim, tapi pastikan tidak override ke false
     const finalOptions = { ...defaultOptions, ...options };
-    
+
     // Paksa hanya tombol OK untuk pesan biasa
     if (!options.showCancelButton && !options.showDenyButton) {
       finalOptions.showConfirmButton = true;
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
       finalOptions.showDenyButton = false;
       finalOptions.showCloseButton = false;
     }
-    
+
     return Swal.fire(finalOptions).finally(() => (isAlertVisible = false));
   }
 
@@ -129,12 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
       title: message,
       text: 'Mohon tunggu sebentar...',
       icon: 'info',
-      showConfirmButton: false,
-      showCancelButton: false,
-      showDenyButton: false,
-      showCloseButton: false,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
+      customClass: {
+        confirmButton: false
+      },
+      buttonsStyling: false,
       didOpen: () => {
         Swal.showLoading();
       }
@@ -173,7 +170,8 @@ document.addEventListener('DOMContentLoaded', function () {
       altInput: true,
       altFormat: 'd F Y',
       placeholder: 'Pilih Tanggal',
-      minDate: 'today', // Disable tanggal sebelum hari ini
+      minDate: 'today',
+      locale: "id",
       disable: [
         function(date) {
           // Disable semua tanggal sebelum hari ini
@@ -254,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return data.text;
         }
       });
-      
+
       // Tambahkan event handler untuk mencegah crash
       selector.on('select2:open', function() {
         // Pastikan dropdown tidak overlap
@@ -262,12 +260,12 @@ document.addEventListener('DOMContentLoaded', function () {
           $('.select2-dropdown').css('z-index', '9999');
         }, 10);
       });
-      
+
       // Fix label overlapping dengan Select2
       selector.on('select2:select select2:clear', function() {
         const container = selector.parent();
         const label = container.find('label');
-        
+
         if (selector.val() && selector.val() !== '') {
           container.addClass('has-value');
           label.addClass('floating');
@@ -275,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
           container.removeClass('has-value');
           label.removeClass('floating');
         }
-        
+
         // Trigger validasi real-time untuk Select2
         setTimeout(() => {
           const fieldName = selector.attr('name');
@@ -292,12 +290,12 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }, 100);
       });
-      
+
       // Trigger initial check
       selector.trigger('change');
     }
   }
-  
+
   // Inisialisasi Select2 dengan delay untuk memastikan DOM ready
   setTimeout(function() {
     initSelect2(pjAcara, 'Pilih PJ Acara');
@@ -308,19 +306,19 @@ document.addEventListener('DOMContentLoaded', function () {
   }, 100);
 
   // === VALIDASI REAL-TIME ===
-  
+
   // Fungsi untuk menampilkan error message
   function showFieldError(field, message) {
     // Hapus error styling lama
     field.classList.remove('is-invalid');
     field.classList.add('is-invalid');
-    
+
     // Hapus pesan error lama
     const existingError = field.parentNode.querySelector('.invalid-feedback');
     if (existingError) {
       existingError.remove();
     }
-    
+
     // Tambahkan pesan error baru
     const errorMsg = document.createElement('div');
     errorMsg.className = 'invalid-feedback d-block';
@@ -328,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
     errorMsg.textContent = message;
     field.parentNode.appendChild(errorMsg);
   }
-  
+
   // Fungsi untuk menghapus error message
   function clearFieldError(field) {
     field.classList.remove('is-invalid');
@@ -337,13 +335,13 @@ document.addEventListener('DOMContentLoaded', function () {
       existingError.remove();
     }
   }
-  
+
   // Fungsi validasi untuk field text biasa dengan regex
   function validateTextField(field, fieldName, customRules = {}) {
     const value = field.value.trim();
     let isValid = true;
     let errorMessage = '';
-    
+
     // Validasi wajib diisi
     if (!value) {
       isValid = false;
@@ -365,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
             errorMessage = 'Nama kegiatan maksimal 100 karakter.';
           }
           break;
-          
+
         case 'tempat_kegiatan':
           // Regex: Hanya huruf, angka, spasi, dan karakter khusus yang diperbolehkan
           const tempatRegex = /^[a-zA-Z0-9\s\-_.,()&]+$/;
@@ -380,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
             errorMessage = 'Tempat kegiatan maksimal 100 karakter.';
           }
           break;
-          
+
         case 'jumlah_peserta_kegiatan':
           // Regex: Hanya angka positif
           const jumlahRegex = /^[1-9][0-9]*$/;
@@ -395,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           }
           break;
-          
+
         case 'anggaran_kegiatan':
           // Untuk anggaran, kita akan validasi setelah format
           const cleanValue = value.replace(/[^\d]/g, '');
@@ -413,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
           break;
       }
     }
-    
+
     // Validasi custom rules
     if (isValid && customRules) {
       if (customRules.minLength && value.length < customRules.minLength) {
@@ -429,63 +427,63 @@ document.addEventListener('DOMContentLoaded', function () {
         errorMessage = customRules.patternMessage || `${fieldName} format tidak valid.`;
       }
     }
-    
+
     if (isValid) {
       clearFieldError(field);
     } else {
       showFieldError(field, errorMessage);
     }
-    
+
     return isValid;
   }
-  
+
   // Fungsi validasi untuk select dropdown
   function validateSelectField(field, fieldName) {
     const value = field.value;
     let isValid = true;
     let errorMessage = '';
-    
+
     if (!value || value === '') {
       isValid = false;
       errorMessage = `${fieldName} wajib dipilih.`;
     }
-    
+
     if (isValid) {
       clearFieldError(field);
     } else {
       showFieldError(field, errorMessage);
     }
-    
+
     return isValid;
   }
-  
+
   // Fungsi validasi untuk Select2 fields
   function validateSelect2Field(selector, fieldName) {
     const value = selector.val();
     let isValid = true;
     let errorMessage = '';
-    
+
     if (!value || value === '' || value === null) {
       isValid = false;
       errorMessage = `${fieldName} wajib dipilih.`;
     }
-    
+
     const field = selector[0];
     if (isValid) {
       clearFieldError(field);
     } else {
       showFieldError(field, errorMessage);
     }
-    
+
     return isValid;
   }
-  
+
   // Fungsi validasi untuk Flatpickr fields
   function validateFlatpickrField(field, fieldName) {
     const value = field.value;
     let isValid = true;
     let errorMessage = '';
-    
+
     if (!value || value === '') {
       isValid = false;
       errorMessage = `${fieldName} wajib diisi.`;
@@ -495,23 +493,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedDate = new Date(value);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
+
         if (selectedDate < today) {
           isValid = false;
           errorMessage = 'Tanggal tidak boleh sebelum hari ini.';
         }
       }
     }
-    
+
     if (isValid) {
       clearFieldError(field);
     } else {
       showFieldError(field, errorMessage);
     }
-    
+
     return isValid;
   }
-  
+
   // Fungsi untuk memformat input anggaran dengan prefix Rp dan pemisah ribuan
   function formatAnggaran(input) {
     let value = input.value.replace(/[^\d]/g, '');
@@ -522,12 +520,12 @@ document.addEventListener('DOMContentLoaded', function () {
       input.value = '';
     }
   }
-  
+
   // Fungsi untuk mendapatkan nilai angka murni dari input anggaran
   function getAnggaranValue(input) {
     return input.value.replace(/[^\d]/g, '');
   }
-  
+
   // Fungsi untuk memformat anggaran saat menampilkan data (untuk edit mode)
   function displayAnggaranValue(value) {
     if (value && value !== '') {
@@ -538,74 +536,74 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     return '';
   }
-  
+
   // Fungsi untuk mengkonversi tanggal ke format bahasa Indonesia
   function formatTanggalIndonesia(tanggalString) {
     if (!tanggalString || tanggalString === '-') {
       return '-';
     }
-    
+
     try {
       // Array nama bulan dalam bahasa Indonesia
       const namaBulan = [
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
       ];
-      
+
       // Array nama hari dalam bahasa Indonesia
       const namaHari = [
         'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'
       ];
-      
+
       // Parse tanggal dari string (format YYYY-MM-DD)
       const tanggal = new Date(tanggalString);
-      
+
       // Pastikan tanggal valid
       if (isNaN(tanggal.getTime())) {
         return tanggalString; // Return original jika tidak valid
       }
-      
+
       const hari = tanggal.getDate();
       const bulan = namaBulan[tanggal.getMonth()];
       const tahun = tanggal.getFullYear();
       const namaHariIni = namaHari[tanggal.getDay()];
-      
+
       return `${namaHariIni}, ${hari} ${bulan} ${tahun}`;
     } catch (error) {
       console.error('Error formatting date:', error);
       return tanggalString; // Return original jika error
     }
   }
-  
+
   // Fungsi untuk mengkonversi waktu ke format bahasa Indonesia
   function formatWaktuIndonesia(waktuString) {
     if (!waktuString || waktuString === '-') {
       return '-';
     }
-    
+
     try {
       // Format waktu dari HH:MM ke format yang lebih mudah dibaca
       const [jam, menit] = waktuString.split(':');
       const jamInt = parseInt(jam);
       const menitInt = parseInt(menit);
-      
+
       // Format dengan leading zero jika perlu
       const jamFormatted = jamInt.toString().padStart(2, '0');
       const menitFormatted = menitInt.toString().padStart(2, '0');
-      
+
       return `${jamFormatted}:${menitFormatted} WIB`;
     } catch (error) {
       console.error('Error formatting time:', error);
       return waktuString; // Return original jika error
     }
   }
-  
+
   // Fungsi untuk memvalidasi semua field sekaligus
   function validateAllFields() {
     if (!giatbidForm) return true;
-    
+
     let allValid = true;
-    
+
     // Validasi untuk input text biasa
     const textFields = [
       { name: 'nama_kegiatan', label: 'Nama Kegiatan' },
@@ -613,7 +611,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { name: 'jumlah_peserta_kegiatan', label: 'Jumlah Peserta' },
       { name: 'anggaran_kegiatan', label: 'Anggaran' }
     ];
-    
+
     textFields.forEach(fieldConfig => {
       const field = giatbidForm.querySelector(`[name="${fieldConfig.name}"]`);
       if (field) {
@@ -621,13 +619,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isValid) allValid = false;
       }
     });
-    
+
     // Validasi untuk select dropdown
     const selectFields = [
       { name: 'bidang_kegiatan', label: 'Bidang' },
       { name: 'status_apbd_kegiatan', label: 'Status APBD' }
     ];
-    
+
     selectFields.forEach(fieldConfig => {
       const field = giatbidForm.querySelector(`[name="${fieldConfig.name}"]`);
       if (field) {
@@ -635,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isValid) allValid = false;
       }
     });
-    
+
     // Validasi untuk Select2 fields
     const select2Fields = [
       { selector: pjAcara, label: 'PJ Acara' },
@@ -644,20 +642,20 @@ document.addEventListener('DOMContentLoaded', function () {
       { selector: pjKonsumsi, label: 'PJ Konsumsi' },
       { selector: pjDokumentasi, label: 'PJ Dokumentasi' }
     ];
-    
+
     select2Fields.forEach(fieldConfig => {
       if (fieldConfig.selector && fieldConfig.selector.length) {
         const isValid = validateSelect2Field(fieldConfig.selector, fieldConfig.label);
         if (!isValid) allValid = false;
       }
     });
-    
+
     // Validasi untuk Flatpickr fields
     const flatpickrFields = [
       { name: 'tgl_kegiatan', label: 'Tanggal Kegiatan' },
       { name: 'waktu_kegiatan', label: 'Waktu Kegiatan' }
     ];
-    
+
     flatpickrFields.forEach(fieldConfig => {
       const field = giatbidForm.querySelector(`[name="${fieldConfig.name}"]`);
       if (field) {
@@ -665,16 +663,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isValid) allValid = false;
       }
     });
-    
+
     return allValid;
   }
-  
+
   // Setup validasi real-time untuk semua field
   function setupRealtimeValidation() {
     if (!giatbidForm) return;
-    
+
     console.log('🔍 Setting up real-time validation...');
-    
+
     // Validasi untuk input text biasa
     const textFields = [
       { name: 'nama_kegiatan', label: 'Nama Kegiatan' },
@@ -682,7 +680,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { name: 'jumlah_peserta_kegiatan', label: 'Jumlah Peserta' },
       { name: 'anggaran_kegiatan', label: 'Anggaran' }
     ];
-    
+
     textFields.forEach(fieldConfig => {
       const field = giatbidForm.querySelector(`[name="${fieldConfig.name}"]`);
       if (field) {
@@ -704,19 +702,19 @@ document.addEventListener('DOMContentLoaded', function () {
               e.preventDefault();
             }
           });
-          
+
           // Event listener untuk input - format dengan Rp dan pemisah ribuan
           field.addEventListener('input', function() {
             formatAnggaran(field);
             validateTextField(field, fieldConfig.label);
           });
-          
+
           // Event listener untuk blur - pastikan format tetap benar
           field.addEventListener('blur', function() {
             formatAnggaran(field);
             validateTextField(field, fieldConfig.label);
           });
-          
+
           // Event listener untuk paste - bersihkan dan format ulang
           field.addEventListener('paste', function(e) {
             setTimeout(() => {
@@ -741,11 +739,11 @@ document.addEventListener('DOMContentLoaded', function () {
               e.preventDefault();
             }
           });
-          
+
           field.addEventListener('input', function() {
             validateTextField(field, fieldConfig.label);
           });
-          
+
           field.addEventListener('blur', function() {
             validateTextField(field, fieldConfig.label);
           });
@@ -754,11 +752,11 @@ document.addEventListener('DOMContentLoaded', function () {
           field.addEventListener('input', function() {
             validateTextField(field, fieldConfig.label);
           });
-          
+
           field.addEventListener('blur', function() {
             validateTextField(field, fieldConfig.label);
           });
-          
+
           // Event listener untuk paste - bersihkan karakter yang tidak diizinkan
           field.addEventListener('paste', function(e) {
             setTimeout(() => {
@@ -774,39 +772,39 @@ document.addEventListener('DOMContentLoaded', function () {
           field.addEventListener('input', function() {
             validateTextField(field, fieldConfig.label);
           });
-          
+
           field.addEventListener('blur', function() {
             validateTextField(field, fieldConfig.label);
           });
         }
-        
+
         // Validasi awal jika field sudah ada nilai
         if (field.value) {
           validateTextField(field, fieldConfig.label);
         }
       }
     });
-    
+
     // Validasi untuk select dropdown
     const selectFields = [
       { name: 'bidang_kegiatan', label: 'Bidang' },
       { name: 'status_apbd_kegiatan', label: 'Status APBD' }
     ];
-    
+
     selectFields.forEach(fieldConfig => {
       const field = giatbidForm.querySelector(`[name="${fieldConfig.name}"]`);
       if (field) {
         field.addEventListener('change', function() {
           validateSelectField(field, fieldConfig.label);
         });
-        
+
         // Validasi awal jika field sudah ada nilai
         if (field.value) {
           validateSelectField(field, fieldConfig.label);
         }
       }
     });
-    
+
     // Validasi untuk Select2 fields
     const select2Fields = [
       { selector: pjAcara, label: 'PJ Acara' },
@@ -815,49 +813,101 @@ document.addEventListener('DOMContentLoaded', function () {
       { selector: pjKonsumsi, label: 'PJ Konsumsi' },
       { selector: pjDokumentasi, label: 'PJ Dokumentasi' }
     ];
-    
+
     select2Fields.forEach(fieldConfig => {
       if (fieldConfig.selector && fieldConfig.selector.length) {
         fieldConfig.selector.on('change', function() {
           validateSelect2Field(fieldConfig.selector, fieldConfig.label);
         });
-        
+
         // Validasi awal jika field sudah ada nilai
         if (fieldConfig.selector.val()) {
           validateSelect2Field(fieldConfig.selector, fieldConfig.label);
         }
       }
     });
-    
+
     // Validasi untuk Flatpickr fields
     const flatpickrFields = [
       { name: 'tgl_kegiatan', label: 'Tanggal Kegiatan' },
       { name: 'waktu_kegiatan', label: 'Waktu Kegiatan' }
     ];
-    
+
     flatpickrFields.forEach(fieldConfig => {
       const field = giatbidForm.querySelector(`[name="${fieldConfig.name}"]`);
       if (field) {
         field.addEventListener('change', function() {
           validateFlatpickrField(field, fieldConfig.label);
         });
-        
+
         // Validasi awal jika field sudah ada nilai
         if (field.value) {
           validateFlatpickrField(field, fieldConfig.label);
         }
       }
     });
-    
+
     console.log('✅ Real-time validation setup completed');
   }
-  
-  // Validasi manual seperti di pegawai - Hanya jika form ada
-  if (giatbidForm) {
-    console.log('✅ Form validation ready (manual approach)');
-    // Setup validasi real-time
-    setTimeout(setupRealtimeValidation, 200); // Delay untuk memastikan semua plugin sudah loaded
+
+  // === AKTIFKAN / NONAKTIFKAN TOMBOL SUBMIT SECARA OTOMATIS ===
+  function setupAutoDisableSubmit() {
+    if (!giatbidForm || !submitBtn) return;
+
+    // Daftar nama input yang wajib diisi
+    const requiredFields = [
+      'nama_kegiatan', 'tgl_kegiatan', 'tempat_kegiatan', 'waktu_kegiatan',
+      'bidang_kegiatan', 'jumlah_peserta_kegiatan', 'pj_acara_kegiatan',
+      'pj_sarpras_kegiatan', 'pj_mc_kegiatan', 'pj_konsumsi_kegiatan',
+      'pj_dokumentasi_kegiatan', 'anggaran_kegiatan', 'status_apbd_kegiatan'
+    ];
+
+    function checkFormFilled() {
+      let allFilled = true;
+
+      requiredFields.forEach(name => {
+        const field = giatbidForm.querySelector(`[name="${name}"]`);
+        if (field) {
+          // Ambil nilai dari Select2 / input biasa
+          let value = field.value;
+          if ($(field).hasClass('select2-hidden-accessible')) {
+            value = $(field).val(); // Select2
+          }
+          if (!value || value.trim() === '') {
+            allFilled = false;
+          }
+        } else {
+          console.warn(`⚠️ Field ${name} tidak ditemukan di form.`);
+        }
+      });
+
+      // Ubah status tombol
+      submitBtn.disabled = !allFilled;
+    }
+
+    // Jalankan saat halaman selesai render form
+    checkFormFilled();
+
+    // Dengarkan semua event input, change, dan select2
+    giatbidForm.addEventListener('input', checkFormFilled);
+    giatbidForm.addEventListener('change', checkFormFilled);
+    $(giatbidForm)
+      .find('.select2')
+      .on('select2:select select2:unselect select2:clear', checkFormFilled);
+
+    // Jika ada Flatpickr untuk tanggal, dengarkan juga
+    if (typeof tglPicker !== 'undefined' && tglPicker) {
+      tglPicker.config.onChange.push(checkFormFilled);
+    }
   }
+
+
+
+  // Validasi manual seperti di pegawai - Hanya jika form ada
+  setTimeout(() => {
+    setupRealtimeValidation();
+    setupAutoDisableSubmit();
+  }, 200);
 
   // === 4. FUNGSI INTI KALENDER ===
 
@@ -865,7 +915,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Fungsi untuk menampilkan detail kegiatan
   function showDetailKegiatan(kegiatanId) {
     console.log('🔍 Loading detail for kegiatan ID:', kegiatanId);
-    
+
     // Pastikan ID valid
     if (!kegiatanId || kegiatanId === 'null' || kegiatanId === null) {
       console.error('❌ Invalid kegiatan ID:', kegiatanId);
@@ -879,14 +929,15 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       return;
     }
-    
+
     showLoadingScreen('Memuat detail kegiatan...');
-    
+
     $.get(`/giatbid/${kegiatanId}/edit`)
       .done(function (data) {
         console.log('✅ Detail data received:', data);
-        
+
         // Isi data ke modal detail dengan format bahasa Indonesia
+        document.getElementById('detailKegiatanModalLabel').textContent = 'Detail Kegiatan ' + data.bidang_kegiatan || '-';
         document.getElementById('detailNamaKegiatan').textContent = data.nama_kegiatan || '-';
         document.getElementById('detailTanggal').textContent = formatTanggalIndonesia(data.tgl_kegiatan);
         document.getElementById('detailWaktu').textContent = formatWaktuIndonesia(data.waktu_kegiatan);
@@ -895,14 +946,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('detailJumlahPeserta').textContent = data.jumlah_peserta_kegiatan || '-';
         document.getElementById('detailStatusApbd').textContent = data.status_apbd_kegiatan || '-';
         document.getElementById('detailAnggaran').textContent = data.anggaran_kegiatan ? 'Rp ' + parseInt(data.anggaran_kegiatan).toLocaleString('id-ID') : '-';
-        
+
         // Isi data penanggung jawab
         document.getElementById('detailPjAcara').textContent = data.pj_acara_nama || '-';
         document.getElementById('detailPjSarpras').textContent = data.pj_sarpras_nama || '-';
         document.getElementById('detailPjMc').textContent = data.pj_mc_nama || '-';
         document.getElementById('detailPjKonsumsi').textContent = data.pj_konsumsi_nama || '-';
         document.getElementById('detailPjDokumentasi').textContent = data.pj_dokumentasi_nama || '-';
-        
+
         hideLoadingScreen();
         detailKegiatanModal.show();
       })
@@ -914,14 +965,14 @@ document.addEventListener('DOMContentLoaded', function () {
           error: error,
           responseText: xhr.responseText
         });
-        
+
         let errorMessage = 'Data kegiatan tidak dapat ditemukan.';
         if (xhr.responseJSON?.error) {
           errorMessage = xhr.responseJSON.error;
         } else if (xhr.responseJSON?.message) {
           errorMessage = xhr.responseJSON.message;
         }
-        
+
         showAlertOnce({
           icon: 'error',
           title: 'Gagal Memuat!',
@@ -942,7 +993,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (giatbidForm) {
       giatbidForm.reset(); // Reset form HTML
-      
+
       // Hapus semua styling error secara manual (termasuk dari validasi real-time)
       giatbidForm.querySelectorAll('.is-invalid').forEach(el => {
         el.classList.remove('is-invalid');
@@ -962,7 +1013,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Sembunyikan tombol delete
       if (btnDeleteEvent) btnDeleteEvent.classList.add('d-none');
-      
+
       console.log('✅ Form reset for Add mode - all validation errors cleared');
     }
   }
@@ -975,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (giatbidForm) {
       giatbidForm.reset(); // Reset form HTML
-      
+
       // Hapus semua styling error secara manual (termasuk dari validasi real-time)
       giatbidForm.querySelectorAll('.is-invalid').forEach(el => {
         el.classList.remove('is-invalid');
@@ -995,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Tampilkan tombol delete
       if (btnDeleteEvent) btnDeleteEvent.classList.remove('d-none');
-      
+
       console.log('✅ Form reset for Edit mode - all validation errors cleared');
     }
   }
@@ -1015,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Init FullCalendar - Hanya jika element ada
   if (calendarEl) {
-    
+
     // Tunggu FullCalendar dimuat
     const initCalendar = () => {
       if (typeof Calendar !== 'undefined') {
@@ -1030,17 +1081,17 @@ document.addEventListener('DOMContentLoaded', function () {
         type: 'GET',
         success: function (data) {
           console.log('📅 Events data received from server:', data);
-          
+
           // Debug: Log setiap event ID
-          data.forEach((event, index) => {
-            console.log(`📅 Event ${index}:`, {
-              id: event.id,
-              title: event.title,
-              start: event.start,
-              waktu_kegiatan: event.waktu_kegiatan
-            });
-          });
-          
+          // data.forEach((event, index) => {
+          //   console.log(`📅 Event ${index}:`, {
+          //     id: event.id,
+          //     title: event.title,
+          //     start: event.start,
+          //     waktu_kegiatan: event.waktu_kegiatan
+          //   });
+          // });
+
           // Pastikan waktu event tidak dikonversi timezone
           const processedData = data.map(event => {
             if (event.start && event.waktu_kegiatan) {
@@ -1049,28 +1100,28 @@ document.addEventListener('DOMContentLoaded', function () {
               if (tanggal && waktu) {
                 // Gabungkan tanggal dengan waktu dari database
                 event.start = `${tanggal}T${event.waktu_kegiatan}:00`;
-                console.log(`📅 Processed event ${event.id}:`, {
-                  original: event.start,
-                  waktu_kegiatan: event.waktu_kegiatan,
-                  processed: event.start
-                });
+                // console.log(`📅 Processed event ${event.id}:`, {
+                //   original: event.start,
+                //   waktu_kegiatan: event.waktu_kegiatan,
+                //   processed: event.start
+                // });
               }
             }
-            
+
             // Pastikan event memiliki extendedProps untuk waktu_kegiatan
             if (!event.extendedProps) {
               event.extendedProps = {};
             }
             event.extendedProps.waktu_kegiatan = event.waktu_kegiatan;
-            
+
             // Tambahkan title dengan waktu untuk debugging
             if (event.waktu_kegiatan) {
               event.title = `${event.title} (${event.waktu_kegiatan})`;
             }
-            
+
             return event;
           });
-          
+
           // Filter data di sisi klien berdasarkan checkbox
           const selectedBidang = getSelectedBidang();
 
@@ -1133,44 +1184,44 @@ document.addEventListener('DOMContentLoaded', function () {
     direction: direction,
     initialDate: new Date(),
     navLinks: true,
-    
+
     // Konfigurasi bahasa Indonesia
     locale: 'id',
-    
+
     // Konfigurasi timezone untuk menampilkan waktu sesuai database
     timeZone: 'Asia/Jakarta', // Set timezone ke WIB
     displayEventTime: true, // Tampilkan waktu event
     displayEventEnd: true, // Tampilkan waktu akhir event
-    
+
     // Konfigurasi format waktu
     slotLabelFormat: {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
     },
-    
+
     // Konfigurasi event time format
     eventTimeFormat: {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
     },
-    
+
     // Pastikan waktu tidak dikonversi otomatis
     ignoreTimezone: false,
-    
+
     // Konfigurasi untuk memastikan waktu ditampilkan sesuai database
     eventDisplay: 'block',
     eventDidMount: function(info) {
       // Debug: Log waktu event yang ditampilkan
-      console.log('📅 Event mounted:', {
-        id: info.event.id,
-        title: info.event.title,
-        start: info.event.start,
-        startStr: info.event.startStr,
-        waktu_kegiatan: info.event.extendedProps.waktu_kegiatan
-      });
-      
+      // console.log('📅 Event mounted:', {
+      //   id: info.event.id,
+      //   title: info.event.title,
+      //   start: info.event.start,
+      //   startStr: info.event.startStr,
+      //   waktu_kegiatan: info.event.extendedProps.waktu_kegiatan
+      // });
+
       // Pastikan waktu yang ditampilkan sesuai dengan database
       if (info.event.extendedProps.waktu_kegiatan) {
         const waktuElement = info.el.querySelector('.fc-event-time');
@@ -1180,7 +1231,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     },
-    
+
     // Tambahkan eventClassNames untuk warna berdasarkan kategori
     eventClassNames: function ({ event: calendarEvent }) {
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar];
@@ -1192,9 +1243,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ** PENGGANTIAN KUNCI 2: Klik pada tanggal kosong (CREATE) **
     dateClick: function (info) {
-      console.log('📅 Date clicked:', info.date);
-      console.log('📅 tglPicker available:', !!tglPicker);
-      
+      const clickedDate = new Date(info.date);
+      const today = new Date();
+
+      if (clickedDate < today) {
+        showAlertOnce({
+          icon: 'error',
+          title: 'Tanggal Tidak Valid!',
+          text: 'Tidak dapat menambahkan kegiatan sebelum hari ini.'
+        });
+        return; // Hentikan eksekusi fungsi
+      }
+
       resetFormForAdd(); // Gunakan reset untuk mode Add
       offcanvasTitle.innerHTML = 'Tambah Kegiatan';
 
@@ -1207,14 +1267,14 @@ document.addEventListener('DOMContentLoaded', function () {
           const month = String(info.date.getMonth() + 1).padStart(2, '0');
           const day = String(info.date.getDate()).padStart(2, '0');
           const dateStr = `${year}-${month}-${day}`;
-          
+
           console.log('📅 Original date:', info.date);
           console.log('📅 Formatted date string (local):', dateStr);
-          
+
           // Set date dengan format string
           tglPicker.setDate(dateStr, false); // false = tidak trigger onChange
           console.log('📅 Date set successfully');
-          
+
           // Pastikan input value juga ter-set
           const tglInput = document.getElementById('tgl_kegiatan');
           if (tglInput) {
@@ -1256,7 +1316,7 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log('🎯 Event clicked:', info.event);
       console.log('🎯 Event ID:', info.event.id);
       console.log('🎯 Event title:', info.event.title);
-      
+
       // Pastikan ID event valid
       if (!info.event.id || info.event.id === 'null' || info.event.id === null) {
         console.error('❌ Invalid event ID:', info.event.id);
@@ -1270,10 +1330,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         return;
       }
-      
+
       currentEventId = info.event.id; // Simpan ID event
       console.log('✅ currentEventId set to:', currentEventId);
-      
+
       // Simpan juga di sessionStorage sebagai backup
       sessionStorage.setItem('currentEventId', currentEventId);
       console.log('💾 Saved to sessionStorage:', sessionStorage.getItem('currentEventId'));
@@ -1302,7 +1362,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(initCalendar, 500);
     }
     };
-    
+
     // Mulai inisialisasi
     initCalendar();
   } else {
@@ -1341,12 +1401,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (field && (!field.value || field.value.trim() === '')) {
           isValid = false;
           field.classList.add('is-invalid');
-          
+
           // Tambahkan pesan error
           const errorMsg = document.createElement('div');
           errorMsg.className = 'invalid-feedback d-block';
           errorMsg.style.cssText = 'display: block !important; color: #dc3545; font-size: 0.875rem; margin-top: 0.5rem; background: #fff5f5; padding: 0.5rem 0.75rem; border-radius: 0.375rem; border-left: 4px solid #dc3545; border: 1px solid #fecaca; box-shadow: 0 2px 4px rgba(220, 53, 69, 0.1);';
-          
+
           let message = '';
           switch(fieldName) {
             case 'nama_kegiatan': message = 'Nama Kegiatan wajib diisi.'; break;
@@ -1364,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'status_apbd_kegiatan': message = 'Status APBD wajib dipilih.'; break;
             default: message = 'Field ini wajib diisi.'; break;
           }
-          
+
           errorMsg.textContent = message;
           field.parentNode.appendChild(errorMsg);
         }
@@ -1373,9 +1433,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (isValid) {
         submitFormAjax();
       } else {
-        showAlertOnce({ 
-          icon: 'error', 
-          title: 'Data Tidak Valid', 
+        showAlertOnce({
+          icon: 'error',
+          title: 'Data Tidak Valid',
           text: 'Silakan periksa kembali isian form Anda.',
           showCancelButton: false,
           showDenyButton: false,
@@ -1396,14 +1456,14 @@ document.addEventListener('DOMContentLoaded', function () {
     showLoadingScreen(loadingMessage);
 
     const formData = new FormData(giatbidForm);
-    
+
     // Pastikan anggaran yang dikirim hanya berupa angka murni
     const anggaranField = document.getElementById('anggaran_kegiatan');
     if (anggaranField) {
       const anggaranValue = getAnggaranValue(anggaranField);
       formData.set('anggaran_kegiatan', anggaranValue);
     }
-    
+
     const url = id ? `/giatbid/${id}` : '/giatbid';
     const method = id ? 'PUT' : 'POST';
 
@@ -1446,7 +1506,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const errors = xhr.responseJSON.errors;
           let errorCount = 0;
           let errorMessages = [];
-          
+
           // Hapus error styling lama
           giatbidForm.querySelectorAll('.is-invalid').forEach(el => {
             el.classList.remove('is-invalid');
@@ -1454,22 +1514,22 @@ document.addEventListener('DOMContentLoaded', function () {
           giatbidForm.querySelectorAll('.invalid-feedback').forEach(el => {
             el.remove();
           });
-          
+
           // Tandai field yang error (manual seperti di pegawai)
           $.each(errors, function (key, value) {
             errorCount++;
             const element = $(`[name="${key}"]`);
-            
+
             if (element.length > 0) {
               // Add invalid class
               element.addClass('is-invalid');
-              
+
               // Buat elemen pesan error yang lebih baik
               let msgElement = $(
                 '<div class="invalid-feedback d-block" style="display: block !important; color: #dc3545; font-size: 0.875rem; margin-top: 0.5rem; background: #fff5f5; padding: 0.5rem 0.75rem; border-radius: 0.375rem; border-left: 4px solid #dc3545; border: 1px solid #fecaca; box-shadow: 0 2px 4px rgba(220, 53, 69, 0.1);"></div>'
               );
               msgElement.text(value[0]);
-              
+
               // Tempatkan pesan error
               let targetElement = element;
               if (element.parent().hasClass('form-floating')) {
@@ -1477,19 +1537,19 @@ document.addEventListener('DOMContentLoaded', function () {
               } else if (element.parent().hasClass('position-relative')) {
                 targetElement = element.parent();
               }
-              
+
               // Hapus pesan error lama jika ada
               targetElement.find('.invalid-feedback').remove();
               targetElement.after(msgElement);
-              
+
               // Force visibility
               msgElement.show();
               msgElement.css('display', 'block');
-              
+
               errorMessages.push('• ' + value[0]);
             }
           });
-          
+
           // Show detailed error message
           let errorHtml = '<div class="text-start">';
           errorHtml += '<p class="mb-2"><strong>Terjadi kesalahan validasi:</strong></p>';
@@ -1532,16 +1592,13 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Apakah Anda Yakin?',
       text: 'Data yang dihapus tidak dapat dikembalikan!',
       icon: 'warning',
-      showConfirmButton: true,
       showCancelButton: true,
-      showDenyButton: false,
-      showCloseButton: false,
-      confirmButtonText: 'Ya, hapus!',
-      cancelButtonText: 'Batal',
-      confirmButtonColor: '#dc3545',
-      cancelButtonColor: '#6c757d',
-      allowOutsideClick: false,
-      allowEscapeKey: true
+      confirmButtonText: 'Ya, Hapus!',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
     }).then(function (result) {
       if (result.isConfirmed) {
         showLoadingScreen('Menghapus data...');
@@ -1594,7 +1651,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Jangan reset di sini, biarkan form dalam state yang sudah ada
       console.log('📝 Offcanvas opened, currentEventId:', currentEventId);
     });
-    
+
     addEventSidebar.addEventListener('hidden.bs.offcanvas', function () {
       // Reset hanya jika tidak dalam mode edit
       if (!currentEventId) {
@@ -1613,11 +1670,11 @@ document.addEventListener('DOMContentLoaded', function () {
   if (mobileSidebarToggle) {
     const appCalendarSidebar = document.getElementById('app-calendar-sidebar');
     const appOverlay = document.querySelector('.app-overlay');
-    
+
     console.log('📱 Mobile sidebar toggle found:', mobileSidebarToggle);
     console.log('📱 App calendar sidebar found:', appCalendarSidebar);
     console.log('📱 App overlay found:', appOverlay);
-    
+
     // Fungsi untuk show/hide sidebar
     function toggleSidebar(show) {
       if (appCalendarSidebar) {
@@ -1639,17 +1696,17 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('📱 Sidebar toggled, classes:', appCalendarSidebar.className);
       }
     }
-    
+
     mobileSidebarToggle.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
       console.log('📱 Mobile sidebar toggle clicked');
-      
+
       // Toggle sidebar
       const isOpen = appCalendarSidebar.classList.contains('show');
       toggleSidebar(!isOpen);
     });
-    
+
     // Hide sidebar when clicking overlay
     if (appOverlay) {
       appOverlay.addEventListener('click', function () {
@@ -1657,19 +1714,19 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleSidebar(false);
       });
     }
-    
+
     // Hide sidebar when clicking outside on mobile
     document.addEventListener('click', function (e) {
       if (window.innerWidth < 992 && appCalendarSidebar) {
-        if (!appCalendarSidebar.contains(e.target) && 
-            !mobileSidebarToggle.contains(e.target) && 
+        if (!appCalendarSidebar.contains(e.target) &&
+            !mobileSidebarToggle.contains(e.target) &&
             appOverlay && !appOverlay.contains(e.target)) {
           console.log('📱 Clicked outside, hiding sidebar');
           toggleSidebar(false);
         }
       }
     });
-    
+
     // Hide sidebar on window resize to desktop
     window.addEventListener('resize', function () {
       if (window.innerWidth >= 992) {
@@ -1677,7 +1734,7 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleSidebar(false);
       }
     });
-    
+
     // Hide sidebar when pressing escape key
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && appCalendarSidebar.classList.contains('show')) {
@@ -1701,7 +1758,7 @@ document.addEventListener('DOMContentLoaded', function () {
           console.log('✅ Retrieved currentEventId from sessionStorage:', currentEventId);
         }
       }
-      
+
       // Pastikan currentEventId valid sebelum melanjutkan
       if (!currentEventId || currentEventId === 'null' || currentEventId === null) {
         console.error('❌ Invalid currentEventId for edit:', currentEventId);
@@ -1715,31 +1772,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         return;
       }
-      
+
       detailKegiatanModal.hide();
-      
+
       // Buka form edit
       resetFormForEdit(); // Gunakan reset untuk mode Edit
       offcanvasTitle.innerHTML = 'Edit Kegiatan';
-      
+
       // Ganti teks tombol submit
       submitBtn.innerHTML = '<span class="btn-text">Update</span><span class="btn-loading d-none">Mengupdate...</span>';
-      
+
       // Tampilkan tombol delete
       btnDeleteEvent.classList.remove('d-none');
-      
+
       // Ambil data lengkap dari server
       console.log('🔍 Loading edit data for ID:', currentEventId);
       showLoadingScreen('Memuat data kegiatan...');
-      
+
       $.get(`/giatbid/${currentEventId}/edit`)
         .done(function (data) {
           console.log('✅ Edit data received:', data);
-          
+
           // Isi form dengan data
           $('#id_kegiatan').val(data.id_kegiatan);
           $('#nama_kegiatan').val(data.nama_kegiatan).trigger('input');
-          
+
           // Set tanggal dengan error handling
           try {
             tglPicker.setDate(data.tgl_kegiatan, false);
@@ -1754,7 +1811,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('❌ Error setting date:', error);
             $('#tgl_kegiatan').val(data.tgl_kegiatan).trigger('change');
           }
-          
+
           // Set waktu dengan error handling
           try {
             waktuPicker.setDate(data.waktu_kegiatan, false);
@@ -1769,7 +1826,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('❌ Error setting time:', error);
             $('#waktu_kegiatan').val(data.waktu_kegiatan).trigger('change');
           }
-          
+
           $('#tempat_kegiatan').val(data.tempat_kegiatan).trigger('input');
           $('#bidang_kegiatan').val(data.bidang_kegiatan).trigger('change');
           $('#jumlah_peserta_kegiatan').val(data.jumlah_peserta_kegiatan).trigger('input');
@@ -1783,7 +1840,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pjMc.val(data.pj_mc_kegiatan).trigger('change');
             pjKonsumsi.val(data.pj_konsumsi_kegiatan).trigger('change');
             pjDokumentasi.val(data.pj_dokumentasi_kegiatan).trigger('change');
-            
+
             // Trigger validasi untuk Select2 setelah set values
             setTimeout(() => {
               validateSelect2Field(pjAcara, 'PJ Acara');
@@ -1797,12 +1854,12 @@ document.addEventListener('DOMContentLoaded', function () {
           }
 
           hideLoadingScreen();
-          
+
           // Validasi ulang semua field setelah data diisi
           setTimeout(() => {
             validateAllFields();
           }, 300);
-          
+
           bsAddEventSidebar.show();
         })
         .fail(function (xhr, status, error) {
@@ -1813,14 +1870,14 @@ document.addEventListener('DOMContentLoaded', function () {
             error: error,
             responseText: xhr.responseText
           });
-          
+
           let errorMessage = 'Data kegiatan tidak dapat ditemukan.';
           if (xhr.responseJSON?.error) {
             errorMessage = xhr.responseJSON.error;
           } else if (xhr.responseJSON?.message) {
             errorMessage = xhr.responseJSON.message;
           }
-          
+
           showAlertOnce({
             icon: 'error',
             title: 'Gagal Memuat!',
@@ -1844,24 +1901,22 @@ document.addEventListener('DOMContentLoaded', function () {
           console.log('✅ Retrieved currentEventId from sessionStorage for delete:', currentEventId);
         }
       }
-      
+
       detailKegiatanModal.hide();
-      
+
       // Konfirmasi hapus
       Swal.fire({
         title: 'Apakah Anda Yakin?',
         text: 'Data yang dihapus tidak dapat dikembalikan!',
         icon: 'warning',
-        showConfirmButton: true,
         showCancelButton: true,
-        showDenyButton: false,
-        showCloseButton: false,
-        confirmButtonText: 'Ya, hapus!',
+        confirmButtonText: 'Ya, Hapus!',
         cancelButtonText: 'Batal',
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        allowOutsideClick: false,
-        allowEscapeKey: true
+        customClass: {
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-outline-secondary waves-effect'
+        },
+        buttonsStyling: false
       }).then(function (result) {
         if (result.isConfirmed) {
           showLoadingScreen('Menghapus data...');
@@ -1871,7 +1926,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url: `/giatbid/${currentEventId}`,
             success: function (data) {
               hideLoadingScreen();
-              
+
               calendar.refetchEvents(); // Muat ulang event
 
               showAlertOnce({
@@ -1931,7 +1986,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const inlineCalInstance = inlineCalendarEl.flatpickr({
       monthSelectorType: 'static',
       inline: true,
-      minDate: 'today', // Disable tanggal sebelum hari ini
+      minDate: 'today',
+      locale: "id", // Disable tanggal sebelum hari ini
       disable: [
         function(date) {
           // Disable semua tanggal sebelum hari ini

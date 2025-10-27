@@ -6,7 +6,7 @@ namespace App\Http\Controllers\apps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
-use App\Models\Giatbid; // Gunakan model Giatbid
+use App\Models\Giatbid;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -35,7 +35,7 @@ class GiatbidList extends Controller
     {
         // Ambil data kegiatan dari database
         $giatbids = Giatbid::all();
-        
+
         // Debug: Log data yang diambil
         Log::info('Giatbids data from database', [
             'count' => $giatbids->count(),
@@ -70,14 +70,14 @@ class GiatbidList extends Controller
                     'calendar' => $giat->bidang_kegiatan ?? 'Lainnya'
                 ]
             ];
-            
+
             // Debug: Log setiap event yang dibuat
             Log::info('Creating event for giatbid', [
                 'id_kegiatan' => $giat->id_kegiatan,
                 'nama_kegiatan' => $giat->nama_kegiatan,
                 'event_id' => $eventData['id']
             ]);
-            
+
             $events[] = $eventData;
         }
 
@@ -139,16 +139,16 @@ class GiatbidList extends Controller
         try {
             // Debug: Log ID yang diterima
             Log::info('Edit giatbid request', ['id' => $giatbid->id_kegiatan]);
-            
+
             // Ambil data dengan relasi penanggung jawab
             $giatbid->load([
                 'pjAcara:id_pegawai,nama_pegawai',
-                'pjSarpras:id_pegawai,nama_pegawai', 
+                'pjSarpras:id_pegawai,nama_pegawai',
                 'pjMc:id_pegawai,nama_pegawai',
                 'pjKonsumsi:id_pegawai,nama_pegawai',
                 'pjDokumentasi:id_pegawai,nama_pegawai'
             ]);
-            
+
             // Tambahkan nama penanggung jawab ke response
             $data = $giatbid->toArray();
             $data['pj_acara_nama'] = $giatbid->pjAcara->nama_pegawai ?? null;
@@ -156,9 +156,9 @@ class GiatbidList extends Controller
             $data['pj_mc_nama'] = $giatbid->pjMc->nama_pegawai ?? null;
             $data['pj_konsumsi_nama'] = $giatbid->pjKonsumsi->nama_pegawai ?? null;
             $data['pj_dokumentasi_nama'] = $giatbid->pjDokumentasi->nama_pegawai ?? null;
-            
+
             Log::info('Edit giatbid response', ['data' => $data]);
-            
+
             return response()->json($data);
         } catch (\Exception $e) {
             Log::error('Error in edit giatbid', ['error' => $e->getMessage(), 'id' => $giatbid->id_kegiatan ?? 'unknown']);
